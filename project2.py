@@ -141,7 +141,57 @@ def ver_progresso(user_id):
     else:
         messagebox.showinfo("Progresso", "Nenhuma pontuação registada")
 
+def iniciar_quiz(user_id):
+    login_frame.pack_forget()
+    quiz_frame.pack()
 
+    quiz_frame.user_id = user_id
+    quiz_frame.score = 0
+    quiz_frame.questions_asked = 0 
+    mostrar_pergunta()
+
+def mostrar_pergunta():
+    # Verificar se já foram feitas 10 perguntas
+    if quiz_frame.questions_asked >= 10:
+        finalizar_quiz()
+        return
+    
+    conn = sqlite3.connect('quiz-questions.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM questions ORDER BY RANDOM() LIMIT 1')
+    pergunta = cursor.fetchone()
+    conn.close()
+
+    if pergunta:
+        quiz_frame.current_question = pergunta
+        question_id, question, *options, correct = pergunta
+
+        lbl_question.config(text=question)
+        for i in range(4):
+            radio_buttons[i].config(text=options[i], value=i)
+
+        quiz_frame.correct_answer = correct
+    else:
+        finalizar_quiz()
+
+def verificar_resposta():
+    resposta = var_answer.get()
+    if resposta == quiz_frame.correct_answer:
+        messagebox.showinfo("Correto!", "A sua resposta está certa!")
+        quiz_frame.score += 1
+    else:
+        correct_option = quiz_frame.current_question[quiz_frame.correct_answer + 2]
+        messagebox.showinfo("Errado!", f"A resposta correta era: {correct_option}")
+    
+    # Incrementar o contador de perguntas
+    quiz_frame.questions_asked += 1
+    mostrar_pergunta()
+
+def finalizar_quiz():
+    registar_pontuacao(quiz_frame.user_id, quiz_frame.score)
+    messagebox.showinfo("Fim do Quiz", f"Sua pontuação final é: {quiz_frame.score}")
+    quiz_frame.pack_forget()
+    login_frame.pack()
 
 
 ##INTERFACE
@@ -167,7 +217,21 @@ entry_pw.pack()
 tk.Button(login_frame, text="Login", command=login).pack(pady=5)
 tk.Button(login_frame, text="Registar", command=registar).pack(pady=5)
 
+# Frame do Quiz
+quiz_frame = tk.Frame(root)
 
+lbl_question = tk.Label(quiz_frame, text="", wraplength=300)
+lbl_question.pack(pady=10)
+
+var_answer = tk.IntVar()
+radio_buttons = []
+for i in range(4):
+    rb = tk.Radiobutton(quiz_frame, text="", variable=var_answer, value=i)
+    rb.pack(anchor="w")
+    radio_buttons.append(rb)
+
+tk.Button(quiz_frame, text="Responder", command=verificar_resposta).pack(pady=10)
+tk.Button(quiz_frame, text="Terminar", command=finalizar_quiz).pack(pady=10)
 
 #produzir o resultado
 root.mainloop()
