@@ -16,6 +16,10 @@ import tkinter as tk
 from tkinter import messagebox
 import random
 
+questions = []
+index_question = 0
+correct_answer = 0
+
 ##ESTRUTURA DA BD
 
 #verificar a versão do SQLite
@@ -85,12 +89,14 @@ perguntas = cursor.fetchone()
 print(perguntas)
 conn.close()
 
+##FUNÇÔES
 
 #função LOGIN
 def login():
     name = entry_name.get()
     pw = entry_pw.get()
-    
+
+      
     conn = sqlite3.connect('quiz-questions.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users WHERE name = ? AND pw = ?', (name, pw))
@@ -107,7 +113,11 @@ def login():
 def registar():
     name = entry_name.get()
     pw = entry_pw.get()
-    
+
+    if not name or not pw:
+        messagebox.showinfo(text="Preencha todos os campos")
+        return
+      
     try:
         conn = sqlite3.connect('quiz-questions.db')
         cursor = conn.cursor()
@@ -127,11 +137,21 @@ def registar_pontuacao(user_id, score):
     conn.close()
     messagebox.showinfo("Pontuação Registada", "A sua pontuação foi guardada!")
 
+#função VERIFICA RESPOSTA
+def verificar_resposta(opcao):
+    if opcao == perguntas[6]:  #Índice 6 corresponde à coluna `correct`
+        messagebox.showinfo("Correto!", "Resposta certa!")
+    else:
+        messagebox.showerror("Errado!", "Resposta errada!")
+    carregar_nova_pergunta()
+
+
+
 #função PROGRESSO
 def ver_progresso(user_id):
     conn = sqlite3.connect('quiz-questions.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT score, date FROM scores WHERE user_id = ? ORDER BY data DESC', (user_id,))
+    cursor.execute('SELECT score, date FROM scores WHERE user_id = ? ORDER BY date DESC', (user_id,))
     historico = cursor.fetchall()
     conn.close()
     
@@ -141,7 +161,29 @@ def ver_progresso(user_id):
     else:
         messagebox.showinfo("Progresso", "Nenhuma pontuação registada")
 
+def atualizar_pontuacao(username, pontos_ganhos):
+    conn = sqlite3.connect('quiz-questions.db')
+    cursor = conn.cursor()
+    cursor.execute("UPDATE users SET score = score + ? WHERE user = ?", (pontos_ganhos, username))
+    conn.commit()
+    conn.close()
 
+def finalizar_quiz(username, pontuacao_total):
+    atualizar_pontuacao(username, pontuacao_total)
+    lbl_resultado.config(text=f"Quiz finalizado! Pontuação total: {pontuacao_total}")
+
+
+#função LOGOUT
+def logout():
+    frame_quiz.pack_forget()
+    frame_login.pack()
+    messagebox.showinfo("Logout", "Sessão terminada com sucesso!")
+
+
+#começar o jogo
+def iniciar_quiz(name):
+    frame_login.pack_forget()
+    frame_quiz.pack()
 
 
 ##INTERFACE
@@ -152,21 +194,35 @@ root.title("Quiz Cinquenta e Quatro Dezasete")
 root.geometry("400x400")
 
 #widget login
-login_frame = tk.Frame(root)
-login_frame.pack()
+frame_login = tk.Frame(root)
+frame_login.pack()
 
-tk.Label(login_frame, text="Nome").pack()
-entry_name = tk.Entry(login_frame)
+tk.Label(frame_login, text="Nome").pack()
+entry_name = tk.Entry(frame_login)
 entry_name.pack()
 
-tk.Label(login_frame, text="Senha").pack()
-entry_pw = tk.Entry(login_frame, show="*")
+tk.Label(frame_login, text="Senha").pack()
+entry_pw = tk.Entry(frame_login, show="*")
 entry_pw.pack()
 
 #widget botao
-tk.Button(login_frame, text="Login", command=login).pack(pady=5)
-tk.Button(login_frame, text="Registar", command=registar).pack(pady=5)
+tk.Button(frame_login, text="Login", command=login).pack(pady=5)
+tk.Button(frame_login, text="Registar", command=registar).pack(pady=5)
 
+#widget quiz
+lbl_question = tk.Label(frame_quiz, text="Pergunta aparecerá aqui.").pack()
+lbl_question.pack(pady=10)
+
+frame_quiz = tk.Frame(root)
+
+lbl_question = tk.Label(frame_quiz, text="Pergunta aparecerá aqui.")
+lbl_question.pack(pady=10)
+
+var_resposta = tk.IntVar()
+for i in range(4):
+    tk.Radiobutton(frame_quiz, text=f"Opção {i+1}", variable=var_resposta, value=i).pack(anchor="w")
+
+tk.Button(frame_quiz, text="Submeter", command=lambda: verificar_resposta(var_resposta.get())).pack(pady=5)
 
 
 #produzir o resultado
