@@ -37,12 +37,31 @@ CREATE TABLE IF NOT EXISTS questions (
 )
 ''')
 
+for _, row in df.iterrows():
+    cursor.execute('''
+        INSERT INTO questions (question, option1, option2, option3, option4, correct)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ''', (row['question'], row['option1'], row['option2'], row['option3'], row['option4'], row['correct']))
+
 conn.commit()
 conn.close()
-
+print("Dados inseridos na BD")
 
 #criar a janela, titulo e dimensões
 root = tk.Tk()
 root.title("Quiz Cinquenta e Quatro Dezasete")
 root.geometry("400x400")
 
+#voltar a abrir a ligação
+conn = sqlite3.connect('quiz-questions.db')
+cursor = conn.cursor()
+
+#sacar uma pergunta aleatoriamente
+cursor.execute('SELECT * FROM questions ORDER BY RANDOM() LIMIT 1')
+perguntas = cursor.fetchone()
+
+#mostrar a pergunta
+print(perguntas)
+
+#fechar a ligação à BD
+conn.close()
