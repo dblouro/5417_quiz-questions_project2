@@ -142,6 +142,7 @@ def ver_progresso(user_id):
         messagebox.showinfo("Progresso", "Nenhuma pontuação registada")
 
 def iniciar_quiz(user_id):
+    quiz_frame.used_questions = set()
     login_frame.pack_forget()
     quiz_frame.pack()
 
@@ -158,24 +159,46 @@ def mostrar_pergunta():
     
     conn = sqlite3.connect('quiz-questions.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM questions ORDER BY RANDOM() LIMIT 1')
-    pergunta = cursor.fetchone()
+    
+    while True:
+        cursor.execute('SELECT * FROM questions ORDER BY RANDOM() LIMIT 1')
+        pergunta = cursor.fetchone()
+        if pergunta and pergunta[0] not in quiz_frame.used_questions:
+            quiz_frame.used_questions.add(pergunta[0])  # Adicionar ID da pergunta usada
+            break
+
     conn.close()
 
     if pergunta:
         quiz_frame.current_question = pergunta
         question_id, question, *options, correct = pergunta
 
+        # Armazenar o texto da resposta correta antes de embaralhar
+        correct_answer_text = options[correct]
+
+        # Embaralhar as opções
+        random.shuffle(options)
+
+        # Encontrar o novo índice da resposta correta na lista embaralhada
+        quiz_frame.correct_answer = options.index(correct_answer_text)
+
+        # Resetar a seleção do usuário
+        var_answer.set(-1)
+
+        # Atualizar os widgets com os dados da pergunta
         lbl_question.config(text=question)
         for i in range(4):
             radio_buttons[i].config(text=options[i], value=i)
-
-        quiz_frame.correct_answer = correct
     else:
         finalizar_quiz()
 
+
 def verificar_resposta():
     resposta = var_answer.get()
+    if resposta == -1:
+        messagebox.showwarning("Atenção", "Por favor, selecione uma resposta!")
+        return
+
     if resposta == quiz_frame.correct_answer:
         messagebox.showinfo("Correto!", "A sua resposta está certa!")
         quiz_frame.score += 1
@@ -199,7 +222,7 @@ def finalizar_quiz():
 #criar a janela, titulo e dimensões
 root = tk.Tk()
 root.title("Quiz Cinquenta e Quatro Dezasete")
-root.geometry("400x400")
+root.geometry("1200x800")
 
 #widget login
 login_frame = tk.Frame(root)
@@ -223,7 +246,7 @@ quiz_frame = tk.Frame(root)
 lbl_question = tk.Label(quiz_frame, text="", wraplength=300)
 lbl_question.pack(pady=10)
 
-var_answer = tk.IntVar()
+var_answer = tk.IntVar(value=-1)
 radio_buttons = []
 for i in range(4):
     rb = tk.Radiobutton(quiz_frame, text="", variable=var_answer, value=i)
