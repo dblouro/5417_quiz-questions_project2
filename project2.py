@@ -161,29 +161,7 @@ def ver_progresso(user_id):
     else:
         messagebox.showinfo("Progresso", "Nenhuma pontuação registada")
 
-def atualizar_pontuacao(username, pontos_ganhos):
-    conn = sqlite3.connect('quiz-questions.db')
-    cursor = conn.cursor()
-    cursor.execute("UPDATE users SET score = score + ? WHERE user = ?", (pontos_ganhos, username))
-    conn.commit()
-    conn.close()
 
-def finalizar_quiz(username, pontuacao_total):
-    atualizar_pontuacao(username, pontuacao_total)
-    lbl_resultado.config(text=f"Quiz finalizado! Pontuação total: {pontuacao_total}")
-
-
-#função LOGOUT
-def logout():
-    frame_quiz.pack_forget()
-    frame_login.pack()
-    messagebox.showinfo("Logout", "Sessão terminada com sucesso!")
-
-
-#começar o jogo
-def iniciar_quiz(name):
-    frame_login.pack_forget()
-    frame_quiz.pack()
 
 
 ##INTERFACE
@@ -206,23 +184,9 @@ entry_pw = tk.Entry(frame_login, show="*")
 entry_pw.pack()
 
 #widget botao
-tk.Button(frame_login, text="Login", command=login).pack(pady=5)
-tk.Button(frame_login, text="Registar", command=registar).pack(pady=5)
+tk.Button(login_frame, text="Login", command=login).pack(pady=5)
+tk.Button(login_frame, text="Registar", command=registar).pack(pady=5)
 
-#widget quiz
-lbl_question = tk.Label(frame_quiz, text="Pergunta aparecerá aqui.").pack()
-lbl_question.pack(pady=10)
-
-frame_quiz = tk.Frame(root)
-
-lbl_question = tk.Label(frame_quiz, text="Pergunta aparecerá aqui.")
-lbl_question.pack(pady=10)
-
-var_resposta = tk.IntVar()
-for i in range(4):
-    tk.Radiobutton(frame_quiz, text=f"Opção {i+1}", variable=var_resposta, value=i).pack(anchor="w")
-
-tk.Button(frame_quiz, text="Submeter", command=lambda: verificar_resposta(var_resposta.get())).pack(pady=5)
 
 
 #produzir o resultado
