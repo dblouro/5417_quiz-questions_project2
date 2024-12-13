@@ -166,21 +166,15 @@ def registar_pontuacao(user_id, score):
 def ver_progresso_com_scroll(user_id, frame):
     conn = sqlite3.connect('quiz-questions.db')
     cursor = conn.cursor()
-    #cursor.execute('SELECT score, date FROM scores WHERE user_id = ? ORDER BY date DESC LIMIT 10', (user_id,))
-    cursor.execute('SELECT score, date FROM scores WHERE user_id = ?', (user_id,))
-    #historico = cursor.fetchall()
+    
+    cursor.execute('SELECT score, date FROM scores WHERE user_id = ? ORDER BY date DESC', (user_id,))
+    
     pontuacoes = cursor.fetchall()
     conn.close()
 
-    #if historico:
-        #for p in historico:
-            #pontuacao_label = tk.Label(frame, text=f"Pontuação: {p[0]} - Data: {p[1]}")
-            #pontuacao_label.pack(anchor="w", padx=10, pady=2)
-    #else:
-        #tk.Label(frame, text="Nenhuma pontuação registada").pack(anchor="w", padx=10, pady=10)
-    for i, pontuacao in enumerate(pontuacoes[:10]):  # Exibir apenas as 10 últimas pontuações
-        label = tk.Label(frame, text=f"Jogo {i+1}: {pontuacao[1]} pontos")
-        label.pack()
+    for i, pontuacao in enumerate(pontuacoes[:10]):  #mostrar apenas as 10 ultimas pontuaçoes
+        label = tk.Label(frame, text=f"Jogo {i+1}: {pontuacao[0]} pontos - {pontuacao[1]}")
+        label.pack(anchor="w", padx=10, pady=2)
 
     if len(pontuacoes) > 10:
         scroll_label = tk.Label(frame, text="Exibindo as últimas 10 pontuações")
