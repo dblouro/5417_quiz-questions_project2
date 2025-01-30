@@ -17,6 +17,18 @@ Este é um projeto desenvolvido em Python e o objetivo é construir um quiz inte
 - **SQLite**: Para gestão da base de dados.
 - **openpyxl**: Para exportação de dados para Excel.
 
+## Screenshots
+
+![Registo](images/registar1.png)
+
+![Welcome](images/welcome.png)
+
+![Resposta](images/dq3.png)
+
+![Pontos](images/pontos.png)
+
+![Timer](images/timer.png)
+
 ## Como Usar
 
 1. Clone este repositório:
