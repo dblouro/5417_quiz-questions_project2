@@ -1,37 +1,42 @@
-# Quiz Interativo em Python
+# Interactive Quiz in Python
 
-Este é um projeto desenvolvido em Python e o objetivo é construir um quiz interativo, utilizando a biblioteca Tkinter para a interface gráfica e SQLite para o armazenamento dos dados. O objetivo do jogo é responder corretamente às perguntas apresentadas e acumular pontos.
+This is a project developed in Python, and the goal is to build an interactive quiz using the Tkinter library for the graphical interface and SQLite for data storage. The goal of the game is to answer the questions correctly and accumulate points.
 
-## Funcionalidades
+<div align="left">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" height="40" alt="python logo"  />
+  <img width="12" />
+  <img src="https://skillicons.dev/icons?i=sqlite" height="40" alt="sqlite logo"  />
+</div>
 
-- **Registo e Login de Utilizadores**: Cada utilizador pode criar uma conta e aceder aos resultados através da exportação para excel e ingame.
-- **Histórico de Pontuações**: Exibe as 10 últimas pontuações de cada utilizador no menu principal.
-- **Quiz Dinâmico**: Perguntas retiradas aleatoriamente da base de dados com limite de tempo para cada resposta.
-- **Exportação de Resultados**: Permite exportar o histórico de pontuações para um ficheiro Excel.
-- **Interface Funcional**: Design funcional com elementos gráficos.
+## Features
 
-## Tecnologias Utilizadas
+- **User Registration and Login**: Each user can create an account and access results by exporting them to Excel and ingame.
+- **Score History**: Displays each user's last 10 scores in the main menu.
+- **Dynamic Quiz**: Questions randomly selected from the database with a time limit for each answer.
+- **Results Export**: Allows you to export the score history to an Excel file.
+- **Functional Interface**: Functional design with graphic elements.
+
+## Technologies Used
 
 - **Python 3.13**
-- **Tkinter**: Para criar a interface gráfica.
-- **SQLite**: Para gestão da base de dados.
-- **openpyxl**: Para exportação de dados para Excel.
+- **Tkinter**: To create the graphical interface.
+- **SQLite**: For database management.
+- **openpyxl**: For exporting data to Excel.
 
 ## Screenshots
 
-![Registo](images/registar1.png)
+<p align="center">
+  <img src="images/registar1.png" width="30%">
+  <img src="images/welcome.png" width="30%">
+  <img src="images/dq3.png" width="30%">
+   <img src="images/pontos.png" width="30%">
+  <img src="images/timer.png" width="30%">
+</p>
 
-![Welcome](images/welcome.png)
 
-![Resposta](images/dq3.png)
+## How to Use
 
-![Pontos](images/pontos.png)
-
-![Timer](images/timer.png)
-
-## Como Usar
-
-1. Clone este repositório:
-   ```bash
+1. Clone this repository:
+```bash
    git clone https://github.com/dblouro/5417_quiz-questions_project2.git
    cd quiz-interativo
