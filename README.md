@@ -27,24 +27,24 @@ This is a project developed in Python, and the goal is to build an interactive q
 
 <p align="center">
   <figure>
-    <img src="images/registar1.png" width="30%">
     <figcaption>Registration Form</figcaption>
+    <img src="images/registar1.png" width="30%">
   </figure>
   <figure>
-    <img src="images/welcome.png" width="30%">
     <figcaption>Login Page</figcaption>
+    <img src="images/welcome.png" width="30%">
   </figure>
   <figure>
-    <img src="images/dq3.png" width="30%">
     <figcaption>Main Page Game</figcaption>
+    <img src="images/dq3.png" width="30%">
   </figure>
   <figure>
-    <img src="images/pontos.png" width="30%">
     <figcaption>Points History</figcaption>
+    <img src="images/pontos.png" width="30%">
   </figure>
 <figure>
-    <img src="images/timer.png" width="30%">
     <figcaption>Timer Answering</figcaption>
+    <img src="images/timer.png" width="30%">
   </figure>
 </p>
 
