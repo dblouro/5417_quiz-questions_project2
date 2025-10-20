@@ -26,13 +26,27 @@ This is a project developed in Python, and the goal is to build an interactive q
 ## Screenshots
 
 <p align="center">
-  <img src="images/registar1.png" width="30%">
-  <img src="images/welcome.png" width="30%">
-  <img src="images/dq3.png" width="30%">
-   <img src="images/pontos.png" width="30%">
-  <img src="images/timer.png" width="30%">
+  <figure>
+    <img src="images/registar1.png" width="30%">
+    <figcaption>Registration Form</figcaption>
+  </figure>
+  <figure>
+    <img src="images/welcome.png" width="30%">
+    <figcaption>Login Page</figcaption>
+  </figure>
+  <figure>
+    <img src="images/dq3.png" width="30%">
+    <figcaption>Main Page Game</figcaption>
+  </figure>
+  <figure>
+    <img src="images/pontos.png" width="30%">
+    <figcaption>Points History</figcaption>
+  </figure>
+<figure>
+    <img src="images/timer.png" width="30%">
+    <figcaption>Timer Answering</figcaption>
+  </figure>
 </p>
-
 
 ## How to Use
 
